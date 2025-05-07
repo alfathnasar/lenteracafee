@@ -1,11 +1,10 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart'; // Import Dio
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:lenteracafe/model/pesanan.dart';
 
 class ApiService {
-  final String baseUrl = dotenv.env['BASE_URL'] ?? '';
+  final String baseUrl = "http://192.168.1.20/lentera";
   final Dio dio = Dio(); // Create Dio instance
 
   ApiService() {
