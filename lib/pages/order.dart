@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously, deprecated_member_use
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lenteracafe/API/apiservice.dart';
@@ -22,7 +23,6 @@ class Order extends StatefulWidget {
 }
 
 class _OrderState extends State<Order> {
-  String _selectedPaymentMethod = "Kasir";
   bool isWaiting = false;
   final TextEditingController controller = TextEditingController();
   String nama = "";
@@ -96,35 +96,34 @@ class _OrderState extends State<Order> {
                             ? Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                widget.mejaID != "null"
-                                    ? Container(
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(
-                                        color: AppColors.biru,
-                                        borderRadius: BorderRadius.all(
-                                          Radius.circular(10),
-                                        ),
+                                Visibility(
+                                  visible: kIsWeb,
+                                  child: Container(
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      color: AppColors.biru,
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(10),
                                       ),
-                                      margin: EdgeInsets.only(
-                                        left: 20,
-                                        bottom: 10,
-                                        right: 20,
+                                    ),
+                                    margin: EdgeInsets.only(
+                                      left: 20,
+                                      bottom: 10,
+                                      right: 20,
+                                    ),
+                                    padding: EdgeInsets.symmetric(vertical: 10),
+                                    child: Text(
+                                      textAlign: TextAlign.center,
+                                      "Meja ${widget.mejaID}",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontFamily: "Poppins",
+                                        fontWeight: FontWeight.bold,
+                                        color: AppColors.putih,
                                       ),
-                                      padding: EdgeInsets.symmetric(
-                                        vertical: 10,
-                                      ),
-                                      child: Text(
-                                        textAlign: TextAlign.center,
-                                        "Meja ${widget.mejaID}",
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontFamily: "Poppins",
-                                          fontWeight: FontWeight.bold,
-                                          color: AppColors.putih,
-                                        ),
-                                      ),
-                                    )
-                                    : Container(),
+                                    ),
+                                  ),
+                                ),
                                 Visibility(
                                   visible: !cekTransaksi(),
                                   child: Column(
@@ -184,24 +183,33 @@ class _OrderState extends State<Order> {
                                           ),
                                         ),
                                       ),
-                                      Padding(
-                                        padding: EdgeInsets.only(
-                                          left: 20,
-                                          bottom: 10,
+                                      Visibility(
+                                        visible: nama != "",
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsets.only(
+                                                left: 20,
+                                                bottom: 10,
+                                              ),
+                                              child: Text(
+                                                "Metode Pembayaran",
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontFamily: "Poppins",
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                            Metodepembayaran(
+                                              onChanged: (val) {
+                                                //_selectedPaymentMethod = val;
+                                              },
+                                            ),
+                                          ],
                                         ),
-                                        child: Text(
-                                          "Metode Pembayaran",
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontFamily: "Poppins",
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                      Metodepembayaran(
-                                        onChanged: (val) {
-                                          _selectedPaymentMethod = val;
-                                        },
                                       ),
                                     ],
                                   ),
@@ -250,11 +258,22 @@ class _OrderState extends State<Order> {
                                 ),
                               ],
                             )
-                            : Center(
-                              child: LottieBuilder.asset(
-                                "json/empty.json",
-                                repeat: false,
-                              ),
+                            : Column(
+                              children: [
+                                SizedBox(height: 40),
+                                LottieBuilder.asset(
+                                  "json/empty.json",
+                                  repeat: false,
+                                ),
+                                Text(
+                                  "Belum ada pesanan",
+                                  style: TextStyle(
+                                    fontFamily: "Poppins",
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              ],
                             ),
                   ),
                 ),
@@ -327,8 +346,7 @@ class _OrderState extends State<Order> {
                                   //PEMESANAN MELALUI WEB
                                   // Tambahkan metode pembayaran ke semua item
                                   for (var item in keranjangSementara) {
-                                    item.metodePembayaran =
-                                        _selectedPaymentMethod;
+                                    item.metodePembayaran = "QRIS";
 
                                     item.mejaID =
                                         "$namaPemesan Meja ${widget.mejaID}";
@@ -340,8 +358,7 @@ class _OrderState extends State<Order> {
                                   setState(() {
                                     isWaiting = true;
                                     for (var item in keranjangSementara) {
-                                      item.metodePembayaran =
-                                          _selectedPaymentMethod;
+                                      item.metodePembayaran = "Kasir";
                                       item.mejaID = namaPemesan;
                                       item.status = "Confirm";
                                       item.orderId = orderId;

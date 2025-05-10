@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
@@ -5,6 +6,7 @@ import 'package:lenteracafe/colors/appColors.dart';
 import 'package:lenteracafe/pages/pesanan.dart';
 import 'package:lenteracafe/pages/profile.dart';
 import 'package:lenteracafe/pages/transaksi.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'home.dart'; // import file home.dart
 
 class Homepage extends StatefulWidget {
@@ -17,25 +19,96 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
   int _selectedIndex = 0;
+  String nama = "", jabatan = "";
 
-  final List<Widget> _tabs = [
-    const Home(), // Halaman Home (tanpa SafeArea)
-    const Pesanan(),
-    const Transaksi(),
-    const Profile(),
-  ];
+  Future<void> getUsername() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      nama = prefs.getString('nama') ?? "";
+      jabatan = prefs.getString('jabatan') ?? "";
+    });
+  }
+
+  List<Widget> getTabs() {
+    if (jabatan == "Owner") {
+      return [
+        const Home(),
+        const Pesanan(),
+        const Transaksi(),
+        const Profile(),
+      ];
+    } else {
+      return [const Home(), const Pesanan(), const Profile()];
+    }
+  }
+
+  List<GButton> getTabButtons() {
+    if (jabatan == "Owner") {
+      return const [
+        GButton(icon: FontAwesomeIcons.house, text: 'Awal', iconSize: 15),
+        GButton(
+          icon: FontAwesomeIcons.clipboardCheck,
+          text: 'Pesanan',
+          iconSize: 15,
+        ),
+        GButton(
+          icon: FontAwesomeIcons.cashRegister,
+          text: 'Transaksi',
+          iconSize: 15,
+        ),
+        GButton(icon: Icons.person, text: "Profile", iconSize: 20),
+      ];
+    } else {
+      return const [
+        GButton(icon: FontAwesomeIcons.house, text: 'Awal', iconSize: 15),
+        GButton(
+          icon: FontAwesomeIcons.clipboardCheck,
+          text: 'Pesanan',
+          iconSize: 15,
+        ),
+        GButton(icon: Icons.person, text: "Profile", iconSize: 20),
+      ];
+    }
+  }
+
+  void requestNotificationPermission() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      // print('Izin notifikasi diberikan');
+    } else if (settings.authorizationStatus ==
+        AuthorizationStatus.provisional) {
+      // print('Izin notifikasi sementara diberikan');
+    } else {
+      // print('Izin notifikasi ditolak');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUsername();
+    requestNotificationPermission();
+  }
 
   @override
   Widget build(BuildContext context) {
+    final tabs = getTabs();
+    final tabButtons = getTabButtons();
+
     return Scaffold(
       backgroundColor: AppColors.hitam,
       body: Stack(
         children: [
-          // Konten halaman aktif
           Positioned.fill(
-            child: IndexedStack(index: _selectedIndex, children: _tabs),
+            child: IndexedStack(index: _selectedIndex, children: tabs),
           ),
-          // Bottom navigation bar tetap di bawah
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
@@ -47,7 +120,8 @@ class _HomepageState extends State<Homepage> {
                 activeColor: AppColors.putih,
                 tabBackgroundColor: AppColors.biru,
                 gap: 5,
-                selectedIndex: _selectedIndex,
+                selectedIndex:
+                    _selectedIndex >= tabButtons.length ? 0 : _selectedIndex,
                 onTabChange: (index) {
                   setState(() {
                     _selectedIndex = index;
@@ -57,24 +131,7 @@ class _HomepageState extends State<Homepage> {
                   fontFamily: "Poppins",
                   color: Colors.white,
                 ),
-                tabs: const [
-                  GButton(
-                    icon: FontAwesomeIcons.house,
-                    text: 'Awal',
-                    iconSize: 15,
-                  ),
-                  GButton(
-                    icon: FontAwesomeIcons.clipboardCheck,
-                    text: 'Pesanan',
-                    iconSize: 15,
-                  ),
-                  GButton(
-                    icon: FontAwesomeIcons.cashRegister,
-                    text: 'Transaksi',
-                    iconSize: 15,
-                  ),
-                  GButton(icon: Icons.person, text: "Profile", iconSize: 20),
-                ],
+                tabs: tabButtons,
               ),
             ),
           ),

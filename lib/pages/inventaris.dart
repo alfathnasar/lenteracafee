@@ -26,6 +26,7 @@ class _InventarisState extends State<Inventaris> {
     'Snack',
     'Makanan',
     'Alat dan Bahan',
+    'Operasional',
   ];
 
   List<String> listItem = [
@@ -35,6 +36,7 @@ class _InventarisState extends State<Inventaris> {
     "Snack",
     "Makanan",
     "Alat dan Bahan",
+    "Operasional",
   ];
 
   String searchQuery = '';

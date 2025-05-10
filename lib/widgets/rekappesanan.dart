@@ -46,12 +46,12 @@ class _RekapPesananState extends State<RekapPesanan> {
             child: Row(
               children: [
                 // Menunggu - Pending
-                buildCard(
-                  icon: FontAwesomeIcons.solidClock,
-                  label: "Menunggu",
-                  count: menunggu,
-                  color: Colors.redAccent,
-                ),
+                // buildCard(
+                //   icon: FontAwesomeIcons.solidClock,
+                //   label: "Menunggu",
+                //   count: menunggu,
+                //   color: Colors.redAccent,
+                // ),
                 // Proses - Confirm
                 buildCard(
                   icon: Icons.pie_chart_sharp,
@@ -61,7 +61,7 @@ class _RekapPesananState extends State<RekapPesanan> {
                 ),
                 // Selesai - Done
                 buildCard(
-                  icon: Icons.pie_chart_sharp,
+                  icon: FontAwesomeIcons.solidCircleCheck,
                   label: "Selesai",
                   count: selesai,
                   color: Colors.green[600]!,

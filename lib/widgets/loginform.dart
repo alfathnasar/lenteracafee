@@ -167,24 +167,21 @@ class _LoginformState extends State<Loginform> {
                     );
 
                     if (success) {
+                      setState(() {
+                        isLoading = false;
+                      });
                       SharedPreferences prefs =
                           await SharedPreferences.getInstance();
                       await prefs.setString('nama', nama);
                       await prefs.setString('jabatan', jabatan);
                       await prefs.setBool('isLogin', true);
 
-                      setState(() {
-                        isLoading = false;
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => Homepage()),
+                        );
                       });
-
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return Homepage();
-                          },
-                        ),
-                      );
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(

@@ -248,7 +248,10 @@ class _HomeState extends State<Home> {
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
                               RekapPesanan(pesananList: dataPemasukan),
-                              RekapTransaksi(pesananList: dataToday),
+                              Visibility(
+                                visible: jabatan == "Owner",
+                                child: RekapTransaksi(pesananList: dataToday),
+                              ),
                               Container(
                                 padding: EdgeInsets.only(bottom: 40),
                                 child: RekapListPesanan(

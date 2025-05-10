@@ -14,6 +14,7 @@ import 'package:lenteracafe/model/session_data.dart'; // Tambahkan ini
 class MenuDetail extends StatefulWidget {
   final String idItem, item, harga, kategori, img;
   final String? mejaID;
+  final double rating;
 
   const MenuDetail({
     super.key,
@@ -23,6 +24,7 @@ class MenuDetail extends StatefulWidget {
     required this.kategori,
     required this.img,
     this.mejaID,
+    required this.rating,
   });
 
   @override
@@ -30,7 +32,6 @@ class MenuDetail extends StatefulWidget {
 }
 
 class _MenuDetailState extends State<MenuDetail> {
-  double rating = 4.0;
   String sajianMinuman = "Dingin", sajianMakanan = "";
   bool isToppingSelected = false;
 
@@ -106,6 +107,16 @@ class _MenuDetailState extends State<MenuDetail> {
             padding: EdgeInsets.symmetric(vertical: 8),
             child: Image.asset(
               'img/bahan.png',
+              fit: BoxFit.cover,
+              color: AppColors.hitam,
+            ),
+          );
+        case 'Operasional':
+          return Container(
+            height: 300,
+            padding: EdgeInsets.symmetric(vertical: 8),
+            child: Image.asset(
+              'img/operasional.png',
               fit: BoxFit.cover,
               color: AppColors.hitam,
             ),
@@ -201,7 +212,7 @@ class _MenuDetailState extends State<MenuDetail> {
                         ItemDetail(
                           item: widget.item,
                           harga: formatRupiah(widget.harga),
-                          rating: rating,
+                          rating: widget.rating,
                         ),
                         widget.kategori == "Kopi" ||
                                 widget.kategori == "Non Kopi"
@@ -305,7 +316,8 @@ class _MenuDetailState extends State<MenuDetail> {
                               jumlah: quantity,
                               keterangan: getKeterangan(widget.kategori),
                               transaksi:
-                                  widget.kategori == "Alat dan Bahan"
+                                  widget.kategori == "Alat dan Bahan" ||
+                                          widget.kategori == "Operasional"
                                       ? "Pengeluaran"
                                       : "Pemasukan",
                             ),

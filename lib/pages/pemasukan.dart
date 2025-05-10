@@ -4,6 +4,7 @@ import 'package:lenteracafe/colors/appcolors.dart';
 import 'package:lenteracafe/pages/order.dart';
 import 'package:lenteracafe/pages/section2.dart';
 import 'package:lenteracafe/pages/section3.dart';
+import 'package:lenteracafe/widgets/header.dart';
 
 class Pemasukan extends StatefulWidget {
   const Pemasukan({super.key});
@@ -63,14 +64,16 @@ class _PemasukanState extends State<Pemasukan> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    height: 125,
-                    margin: EdgeInsets.only(left: 20, top: 20, bottom: 20),
-                    child: Image.asset(
-                      "img/logolentera.png",
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+                  mejaId != null
+                      ? Container(
+                        height: 125,
+                        margin: EdgeInsets.only(left: 20, top: 20, bottom: 20),
+                        child: Image.asset(
+                          "img/logolentera.png",
+                          fit: BoxFit.cover,
+                        ),
+                      )
+                      : Header(keterangan: "Daftar Menu"),
                   Expanded(
                     child: Container(
                       decoration: const BoxDecoration(

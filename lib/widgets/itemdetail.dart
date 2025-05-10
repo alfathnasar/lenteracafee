@@ -62,7 +62,7 @@ class _ItemDetailState extends State<ItemDetail> {
                 // StarRating dan Text seperti di atas
                 Icon(Icons.star, size: 24, color: AppColors.kuning),
                 Container(
-                  margin: EdgeInsets.only(left: 10),
+                  margin: EdgeInsets.symmetric(horizontal: 10),
                   child: Text(
                     widget.rating.toString(),
                     style: TextStyle(
@@ -70,18 +70,6 @@ class _ItemDetailState extends State<ItemDetail> {
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                       color: AppColors.kuning,
-                    ),
-                  ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(left: 10),
-                  child: Text(
-                    "(250)",
-                    style: TextStyle(
-                      fontFamily: "Poppins",
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.putih,
                     ),
                   ),
                 ),

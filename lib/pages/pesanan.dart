@@ -78,10 +78,8 @@ class _PesananState extends State<Pesanan> {
   String getStatusFromIndex(int index) {
     switch (index) {
       case 0:
-        return 'Pending';
-      case 1:
         return 'Confirm';
-      case 2:
+      case 1:
         return 'Done';
       default:
         return '';
@@ -190,7 +188,7 @@ class _PesananState extends State<Pesanan> {
                       borderRadius: BorderRadius.circular(100),
                       indicatorBorderRadius: BorderRadius.circular(100),
                     ),
-                    values: const [0, 1, 2],
+                    values: const [0, 1],
                     iconOpacity: 1.0,
                     selectedIconScale: 1.0,
                     indicatorSize: const Size.fromWidth(250),
@@ -199,8 +197,7 @@ class _PesananState extends State<Pesanan> {
                     spacing: 2.0,
 
                     customIconBuilder: (context, local, global) {
-                      final text =
-                          const ['Menunggu', 'Proses', 'Selesai'][local.index];
+                      final text = const ['Proses', 'Selesai'][local.index];
                       return Center(
                         child: Text(
                           text,
@@ -299,6 +296,7 @@ class _PesananState extends State<Pesanan> {
                                       pesananList: filteredData,
                                       total: hitungTotal(filteredData),
                                       isTransaksi: false,
+                                      showTotal: jabatan == "Owner",
                                     ),
                                   ),
                                 ),

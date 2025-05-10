@@ -51,7 +51,7 @@ class _Section2State extends State<Section2> {
       children: [
         // Search field
         Container(
-          margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          margin: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
           child: TextField(
             style: TextStyle(fontFamily: "Poppins"),
             controller: _controller,

@@ -296,6 +296,7 @@ class _TransaksiState extends State<Transaksi> {
                                       pesananList: filteredData,
                                       total: hitungTotal(filteredData),
                                       isTransaksi: true,
+                                      showTotal: true,
                                     ),
                                   ),
                                 ),

@@ -4,7 +4,7 @@ import 'package:dio/dio.dart'; // Import Dio
 import 'package:lenteracafe/model/pesanan.dart';
 
 class ApiService {
-  final String baseUrl = "http://192.168.1.20/lentera";
+  final String baseUrl = "https://lenteracafee.shop/";
   final Dio dio = Dio(); // Create Dio instance
 
   ApiService() {
@@ -43,6 +43,8 @@ class ApiService {
         final jsonResponse = jsonDecode(
           response.data,
         ); // Decode the string into a list
+
+        print(jsonResponse);
 
         // Check if the response is a List
         if (jsonResponse is List) {
@@ -369,6 +371,59 @@ class ApiService {
     } catch (e) {
       print("Error: $e");
       return null;
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> getTransaksiByOrderId(
+    String orderId,
+  ) async {
+    try {
+      final response = await Dio().post(
+        '$baseUrl/API/getPesananByOrderId.php',
+        data: {"orderId": orderId},
+        options: Options(headers: {"Content-Type": "application/json"}),
+      );
+      if (response.statusCode == 200) {
+        // Decode the JSON string into a list of maps
+        final jsonResponse = jsonDecode(
+          response.data,
+        ); // Decode the string into a list
+
+        // Check if the response is a List
+        if (jsonResponse is List) {
+          return List<Map<String, dynamic>>.from(jsonResponse);
+        } else {
+          throw Exception('Unexpected response format: $jsonResponse');
+        }
+      } else {
+        throw Exception(
+          'Failed to load transaksi list: ${response.statusCode}',
+        );
+      }
+    } catch (e) {
+      throw Exception('Error fetching transaksi list: $e');
+    }
+  }
+
+  Future<bool> updateRatingItem({
+    required int id,
+    required double rating,
+  }) async {
+    try {
+      final response = await Dio().post(
+        '$baseUrl/API/updateRating.php',
+        data: jsonEncode({'id': id, 'rating': rating}),
+        options: Options(headers: {'Content-Type': 'application/json'}),
+      );
+
+      final jsonResponse =
+          response.data is String ? jsonDecode(response.data) : response.data;
+
+      print(jsonResponse);
+
+      return jsonResponse['status'] == 'success';
+    } catch (e) {
+      return false;
     }
   }
 }

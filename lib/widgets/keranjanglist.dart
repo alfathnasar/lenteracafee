@@ -57,6 +57,12 @@ class _KeranjanglistState extends State<Keranjanglist> {
           fit: BoxFit.cover,
           color: AppColors.abuMuda,
         );
+      case 'Operasional':
+        return Image.asset(
+          'img/operasional.png',
+          fit: BoxFit.cover,
+          color: AppColors.abuMuda,
+        );
       default:
         return Image.asset(
           'img/logolentera.png',

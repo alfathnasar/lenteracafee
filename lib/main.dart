@@ -1,31 +1,59 @@
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart'; // Tambahkan ini
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:lenteracafe/firebase_options.dart';
-import 'package:lenteracafe/pages/homepage.dart';
-import 'package:lenteracafe/pages/login.dart';
-import 'package:lenteracafe/pages/pemasukan.dart';
-import 'package:intl/date_symbol_data_local.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'package:lenteracafe/pages/weborder.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:go_router/go_router.dart';
+
+import 'firebase_options.dart';
+import 'pages/homepage.dart';
+import 'pages/login.dart';
+import 'pages/pemasukan.dart';
+
+import 'package:flutter_web_plugins/url_strategy.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
-// ✅ Tambahkan handler untuk background message
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  print('🔔 Background message received: ${message.messageId}');
 }
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // ✅ Daftarkan background message handler
+  usePathUrlStrategy();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    RemoteNotification? notification = message.notification;
+    AndroidNotification? android = message.notification?.android;
+
+    if (notification != null && android != null) {
+      flutterLocalNotificationsPlugin.show(
+        notification.hashCode,
+        notification.title,
+        notification.body,
+        NotificationDetails(
+          android: AndroidNotificationDetails(
+            'default_channel',
+            'Default',
+            channelDescription: 'Channel untuk notifikasi umum',
+            importance: Importance.max,
+            priority: Priority.high,
+            icon: '@mipmap/ic_launcher',
+          ),
+        ),
+      );
+    }
+  });
+
   await initializeDateFormatting('id_ID', null);
 
   const AndroidInitializationSettings initializationSettingsAndroid =
@@ -37,71 +65,76 @@ void main() async {
 
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
+  // Buat channel notifikasi
+  const AndroidNotificationChannel channel = AndroidNotificationChannel(
+    'default_channel',
+    'Default',
+    description: 'Channel untuk notifikasi umum',
+    importance: Importance.high,
+  );
+
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin
+      >()
+      ?.createNotificationChannel(channel);
+
   runApp(const MyApp());
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  Widget build(BuildContext context) {
+    final GoRouter router = GoRouter(
+      routes: [
+        GoRoute(
+          path: '/',
+          builder: (context, state) {
+            if (kIsWeb) {
+              return const Pemasukan();
+            } else {
+              return const AuthGate();
+            }
+          },
+        ),
+        GoRoute(path: '/order', builder: (context, state) => const WebOrder()),
+      ],
+    );
+
+    return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
+      routerConfig: router,
+    );
+  }
 }
 
-class _MyAppState extends State<MyApp> {
+class AuthGate extends StatelessWidget {
+  const AuthGate({super.key});
+
   Future<bool> isLogin() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     return pref.getBool('isLogin') ?? false;
   }
 
   @override
-  void initState() {
-    super.initState();
-
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      RemoteNotification? notification = message.notification;
-      AndroidNotification? android = message.notification?.android;
-
-      if (notification != null && android != null) {
-        flutterLocalNotificationsPlugin.show(
-          notification.hashCode,
-          notification.title,
-          notification.body,
-          NotificationDetails(
-            android: AndroidNotificationDetails(
-              'default_channel', // Channel ID yang sama dengan AndroidManifest
-              'Default Channel', // Nama channel
-              importance: Importance.defaultImportance,
-              priority: Priority.defaultPriority,
-            ),
-          ),
-        );
-      }
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home:
-          kIsWeb
-              ? const Pemasukan()
-              : FutureBuilder<bool>(
-                future: isLogin(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Scaffold(
-                      body: Center(child: CircularProgressIndicator()),
-                    );
-                  } else if (snapshot.hasError) {
-                    return const Scaffold(
-                      body: Center(child: Text('Error loading login status')),
-                    );
-                  } else {
-                    return snapshot.data == true ? Homepage() : Login();
-                  }
-                },
-              ),
+    return FutureBuilder<bool>(
+      future: isLogin(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        } else if (snapshot.hasError) {
+          return const Scaffold(
+            body: Center(child: Text('Error loading login status')),
+          );
+        } else {
+          return snapshot.data == true ? const Homepage() : const Login();
+        }
+      },
     );
   }
 }

@@ -4,6 +4,7 @@ import 'package:lenteracafe/colors/appColors.dart';
 import 'package:lenteracafe/pages/order.dart';
 import 'package:lenteracafe/pages/section2.dart';
 import 'package:lenteracafe/pages/section3.dart';
+import 'package:lenteracafe/widgets/header.dart';
 
 class Pengeluaran extends StatefulWidget {
   const Pengeluaran({super.key});
@@ -14,7 +15,6 @@ class Pengeluaran extends StatefulWidget {
 
 class _PengeluaranState extends State<Pengeluaran> {
   Set<String> selectedChips = {}; // State untuk chips filter
-  String? mejaId; // Tambahkan variabel mejaId
   String searchQuery = '';
   List<String> chips = [''];
 
@@ -59,14 +59,7 @@ class _PengeluaranState extends State<Pengeluaran> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    height: 125,
-                    margin: EdgeInsets.only(left: 20, top: 20, bottom: 20),
-                    child: Image.asset(
-                      "img/logolentera.png",
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+                  Header(keterangan: "Daftar Item"),
                   Expanded(
                     child: Container(
                       decoration: const BoxDecoration(
@@ -88,7 +81,7 @@ class _PengeluaranState extends State<Pengeluaran> {
                             child: Section3(
                               selectedChips: selectedChips,
                               searchQuery: searchQuery,
-                              mejaID: mejaId,
+                              mejaID: "",
                               isList: "Alat dan Bahan",
                             ),
                           ),
@@ -104,12 +97,7 @@ class _PengeluaranState extends State<Pengeluaran> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                  builder:
-                      (context) => Order(
-                        mejaID: mejaId.toString(), // kirim ke halaman Order
-                      ),
-                ),
+                MaterialPageRoute(builder: (context) => Order(mejaID: "")),
               );
             },
             backgroundColor: AppColors.biru,

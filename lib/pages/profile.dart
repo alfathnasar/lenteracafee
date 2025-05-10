@@ -176,11 +176,11 @@ class _ProfileState extends State<Profile> {
                                         child: Column(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
-                                            Icon(
-                                              FontAwesomeIcons.doorOpen,
-                                              size: 100,
-                                              color: AppColors.biru,
-                                            ),
+                                            // Icon(
+                                            //   FontAwesomeIcons.doorOpen,
+                                            //   size: 100,
+                                            //   color: AppColors.biru,
+                                            // ),
                                             Container(
                                               margin: EdgeInsets.symmetric(
                                                 vertical: 10,
@@ -198,6 +198,19 @@ class _ProfileState extends State<Profile> {
                                               mainAxisAlignment:
                                                   MainAxisAlignment.end,
                                               children: [
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: Text(
+                                                    "Batal",
+                                                    style: TextStyle(
+                                                      fontFamily: "Poppins",
+                                                      color: Colors.redAccent,
+                                                    ),
+                                                  ),
+                                                ),
+                                                SizedBox(width: 10),
                                                 ElevatedButton(
                                                   style: ElevatedButton.styleFrom(
                                                     backgroundColor:
@@ -224,28 +237,6 @@ class _ProfileState extends State<Profile> {
                                                   },
                                                   child: const Text(
                                                     "OK",
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                    ),
-                                                  ),
-                                                ),
-                                                SizedBox(width: 10),
-                                                ElevatedButton(
-                                                  style: ElevatedButton.styleFrom(
-                                                    backgroundColor:
-                                                        Colors.redAccent,
-                                                    shape: RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                            50,
-                                                          ),
-                                                    ),
-                                                  ),
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                  child: const Text(
-                                                    "BATAL",
                                                     style: TextStyle(
                                                       color: Colors.white,
                                                     ),
