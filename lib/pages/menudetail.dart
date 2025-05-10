@@ -48,7 +48,6 @@ class _MenuDetailState extends State<MenuDetail> {
         });
       }
     } catch (e) {
-      print(e);
       //print(e);
     }
   }

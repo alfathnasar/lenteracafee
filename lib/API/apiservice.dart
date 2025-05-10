@@ -44,8 +44,6 @@ class ApiService {
           response.data,
         ); // Decode the string into a list
 
-        print(jsonResponse);
-
         // Check if the response is a List
         if (jsonResponse is List) {
           return List<Map<String, dynamic>>.from(jsonResponse);
@@ -125,17 +123,11 @@ class ApiService {
               )
               .toList();
 
-      print(dataList);
-
       final response = await dio.post(
         '$baseUrl/API/insertTransaksi.php',
         options: Options(headers: {'Content-Type': 'application/json'}),
         data: jsonEncode({'pesanan': dataList}),
       );
-
-      // Cek respons dari server
-      print("Response status: ${response.statusCode}");
-      print("Response data: ${response.data}");
 
       final jsonResponse =
           response.data is String ? jsonDecode(response.data) : response.data;
@@ -277,8 +269,6 @@ class ApiService {
       final jsonResponse =
           response.data is String ? jsonDecode(response.data) : response.data;
 
-      print(jsonResponse);
-
       return jsonResponse['status'] == 'success';
     } catch (e) {
       return false;
@@ -309,7 +299,6 @@ class ApiService {
         throw Exception('Gagal memuat data: ${response.statusCode}');
       }
     } catch (e) {
-      print(e);
       throw Exception('Terjadi kesalahan saat mengambil data: $e');
     }
   }
@@ -320,7 +309,7 @@ class ApiService {
       Dio dio = Dio();
 
       // Membuat request POST ke server
-      final response = await dio.post(
+      await dio.post(
         "$baseUrl/API/send_notification.php",
         data: {
           "title": "Pesanan Baru dari Web",
@@ -328,11 +317,8 @@ class ApiService {
         },
         options: Options(headers: {"Content-Type": "application/json"}),
       );
-
-      final data = response.data;
-      print("Notifikasi terkirim: $data");
     } catch (e) {
-      print("Gagal mengirim notifikasi: $e");
+      //print("Gagal mengirim notifikasi: $e");
     }
   }
 
@@ -369,7 +355,6 @@ class ApiService {
         throw Exception('Failed to contact the server: ${response.statusCode}');
       }
     } catch (e) {
-      print("Error: $e");
       return null;
     }
   }
@@ -433,7 +418,6 @@ class ApiService {
         };
       }
     } catch (e) {
-      print(e);
       return {'success': false, 'message': 'Error: $e'};
     }
   }
@@ -452,8 +436,6 @@ class ApiService {
 
       final jsonResponse =
           response.data is String ? jsonDecode(response.data) : response.data;
-
-      print(jsonResponse);
 
       return jsonResponse['status'] == 'success';
     } catch (e) {

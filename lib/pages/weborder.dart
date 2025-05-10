@@ -38,7 +38,6 @@ class _WebOrderState extends State<WebOrder> {
         _loading = false;
       });
     } catch (e) {
-      print("Gagal mengambil pesanan: $e");
       setState(() {
         _loading = false;
       });
