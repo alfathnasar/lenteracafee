@@ -176,13 +176,12 @@ class _OrderListState extends State<OrderList> {
                   Column(
                     children: [
                       Visibility(
-                        visible:
-                            ratingSubmitted[item['idItem'].toString()] != true,
+                        visible: ratingSubmitted[item['id'].toString()] != true,
                         child: Column(
                           children: [
                             StarRating(
                               rating:
-                                  userRatings[item['idItem'].toString()] ??
+                                  userRatings[item['id'].toString()] ??
                                   double.tryParse(
                                     item['rating']?.toString() ?? '0',
                                   ) ??
@@ -192,8 +191,7 @@ class _OrderListState extends State<OrderList> {
                               color: Colors.amber,
                               onRatingChanged: (rating) {
                                 setState(() {
-                                  userRatings[item['idItem'].toString()] =
-                                      rating;
+                                  userRatings[item['id'].toString()] = rating;
                                 });
                               },
                             ),
@@ -208,19 +206,19 @@ class _OrderListState extends State<OrderList> {
                               ),
                               onPressed: () async {
                                 double ratingValue =
-                                    userRatings[item['idItem'].toString()] ??
-                                    0.0;
+                                    userRatings[item['id'].toString()] ?? 0.0;
 
                                 if (ratingValue > 0) {
                                   final success = await ApiService()
                                       .updateRatingItem(
-                                        id: item['idItem'],
+                                        idItem: item['idItem'],
+                                        id: item['id'],
                                         rating: ratingValue.toDouble(),
                                       );
+
                                   if (success) {
                                     setState(() {
-                                      ratingSubmitted[item['idItem']
-                                              .toString()] =
+                                      ratingSubmitted[item['id'].toString()] =
                                           true;
                                     });
 
@@ -247,8 +245,7 @@ class _OrderListState extends State<OrderList> {
                         ),
                       ),
                       Visibility(
-                        visible:
-                            ratingSubmitted[item['idItem'].toString()] == true,
+                        visible: ratingSubmitted[item['id'].toString()] == true,
                         child: Text(
                           "Terima Kasih",
                           style: TextStyle(

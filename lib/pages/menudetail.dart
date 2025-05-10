@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:lenteracafe/API/apiservice.dart';
 import 'package:lenteracafe/colors/appcolors.dart';
 import 'package:lenteracafe/model/pesanan.dart';
 import 'package:lenteracafe/widgets/header.dart';
@@ -14,7 +15,6 @@ import 'package:lenteracafe/model/session_data.dart'; // Tambahkan ini
 class MenuDetail extends StatefulWidget {
   final String idItem, item, harga, kategori, img;
   final String? mejaID;
-  final double rating;
 
   const MenuDetail({
     super.key,
@@ -24,7 +24,6 @@ class MenuDetail extends StatefulWidget {
     required this.kategori,
     required this.img,
     this.mejaID,
-    required this.rating,
   });
 
   @override
@@ -34,6 +33,25 @@ class MenuDetail extends StatefulWidget {
 class _MenuDetailState extends State<MenuDetail> {
   String sajianMinuman = "Dingin", sajianMakanan = "";
   bool isToppingSelected = false;
+  double rating = 0.0;
+  int totalRate = 0;
+
+  void fetchAndShowRating() async {
+    try {
+      final result = await ApiService().getRatingByItem(
+        int.parse(widget.idItem),
+      );
+      if (result['success'] && result['ratings'] is List) {
+        setState(() {
+          rating = result['average'];
+          totalRate = result['total'];
+        });
+      }
+    } catch (e) {
+      print(e);
+      //print(e);
+    }
+  }
 
   String getKeterangan(String kategori) {
     switch (kategori) {
@@ -154,6 +172,7 @@ class _MenuDetailState extends State<MenuDetail> {
   void initState() {
     super.initState();
     totalHarga = int.parse(widget.harga); // harga awal
+    fetchAndShowRating();
   }
 
   void incrementQuantity() {
@@ -212,7 +231,8 @@ class _MenuDetailState extends State<MenuDetail> {
                         ItemDetail(
                           item: widget.item,
                           harga: formatRupiah(widget.harga),
-                          rating: widget.rating,
+                          rating: rating,
+                          totalRate: totalRate,
                         ),
                         widget.kategori == "Kopi" ||
                                 widget.kategori == "Non Kopi"

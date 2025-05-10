@@ -12,7 +12,6 @@ class ListMenu extends StatefulWidget {
   final String? mejaID;
   final bool? updateItem;
   final VoidCallback? onUpdate;
-  final double rating;
 
   const ListMenu({
     super.key,
@@ -24,7 +23,6 @@ class ListMenu extends StatefulWidget {
     this.mejaID,
     this.updateItem,
     this.onUpdate,
-    required this.rating,
   });
 
   @override
@@ -217,7 +215,6 @@ class _ListMenuState extends State<ListMenu> {
                     kategori: widget.kategori,
                     img: widget.img,
                     mejaID: widget.mejaID,
-                    rating: widget.rating,
                   ),
             ),
           );

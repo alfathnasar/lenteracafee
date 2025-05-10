@@ -87,7 +87,6 @@ class _Section3State extends State<Section3> {
                       img: item['img'].toString(),
                       updateItem: widget.isList == "Inventaris",
                       onUpdate: () => fetchMenuList(),
-                      rating: double.parse(item['rating']),
                     );
                   }).toList(),
             ),

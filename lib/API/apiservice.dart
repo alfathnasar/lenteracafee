@@ -405,14 +405,48 @@ class ApiService {
     }
   }
 
+  Future<Map<String, dynamic>> getRatingByItem(int idItem) async {
+    final dio = Dio();
+
+    try {
+      final response = await dio.post(
+        '$baseUrl/API/getRating.php', // Ganti dengan URL aslimu
+        data: {'idItem': idItem},
+        options: Options(headers: {'Content-Type': 'application/json'}),
+      );
+
+      if (response.statusCode == 200) {
+        final data =
+            response.data is String
+                ? json.decode(response.data)
+                : response.data;
+        return {
+          'success': true,
+          'ratings': data['ratings'],
+          'average': data['average'],
+          'total': data['total'],
+        };
+      } else {
+        return {
+          'success': false,
+          'message': 'Gagal mengambil data, status: ${response.statusCode}',
+        };
+      }
+    } catch (e) {
+      print(e);
+      return {'success': false, 'message': 'Error: $e'};
+    }
+  }
+
   Future<bool> updateRatingItem({
     required int id,
+    required int idItem,
     required double rating,
   }) async {
     try {
       final response = await Dio().post(
         '$baseUrl/API/updateRating.php',
-        data: jsonEncode({'id': id, 'rating': rating}),
+        data: jsonEncode({'id': id, 'idItem': idItem, 'rating': rating}),
         options: Options(headers: {'Content-Type': 'application/json'}),
       );
 

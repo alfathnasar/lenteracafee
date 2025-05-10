@@ -4,11 +4,13 @@ import 'package:lenteracafe/colors/appcolors.dart';
 class ItemDetail extends StatefulWidget {
   final String item, harga;
   final double rating;
+  final int totalRate;
   const ItemDetail({
     super.key,
     required this.item,
     required this.harga,
     required this.rating,
+    required this.totalRate,
   });
 
   @override
@@ -16,6 +18,26 @@ class ItemDetail extends StatefulWidget {
 }
 
 class _ItemDetailState extends State<ItemDetail> {
+  Widget _buildStarRating(double rating) {
+    List<Widget> stars = [];
+    int fullStars = rating.floor();
+    bool hasHalfStar = (rating - fullStars) >= 0.5;
+
+    for (int i = 0; i < fullStars; i++) {
+      stars.add(Icon(Icons.star, color: AppColors.kuning, size: 20));
+    }
+
+    if (hasHalfStar) {
+      stars.add(Icon(Icons.star_half, color: AppColors.kuning, size: 20));
+    }
+
+    while (stars.length < 5) {
+      stars.add(Icon(Icons.star_border, color: AppColors.kuning, size: 20));
+    }
+
+    return Row(children: stars);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -49,32 +71,47 @@ class _ItemDetailState extends State<ItemDetail> {
               ),
             ),
           ),
-          Container(
-            margin: EdgeInsets.only(top: 10),
-            padding: EdgeInsets.all(5),
-            decoration: BoxDecoration(
-              color: AppColors.hitam,
-              borderRadius: BorderRadius.all(Radius.circular(50)),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // StarRating dan Text seperti di atas
-                Icon(Icons.star, size: 24, color: AppColors.kuning),
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 10),
-                  child: Text(
-                    widget.rating.toString(),
-                    style: TextStyle(
-                      fontFamily: "Poppins",
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.kuning,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                margin: EdgeInsets.only(top: 10),
+                padding: EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  color: AppColors.hitam,
+                  borderRadius: BorderRadius.all(Radius.circular(50)),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _buildStarRating(widget.rating),
+                    Container(
+                      margin: EdgeInsets.only(left: 10, right: 10),
+                      child: Text(
+                        widget.rating.toStringAsFixed(1),
+                        style: TextStyle(
+                          fontFamily: "Poppins",
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.kuning,
+                        ),
+                      ),
                     ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 10, left: 10),
+                child: Text(
+                  "(${widget.totalRate})",
+                  style: TextStyle(
+                    fontFamily: "Poppins",
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ],
       ),
