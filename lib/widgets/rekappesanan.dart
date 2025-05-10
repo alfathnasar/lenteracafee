@@ -20,7 +20,7 @@ class _RekapPesananState extends State<RekapPesanan> {
 
   @override
   Widget build(BuildContext context) {
-    final menunggu = countByStatus('pending');
+    //final menunggu = countByStatus('pending');
     final proses = countByStatus('confirm');
     final selesai = countByStatus('done');
 
