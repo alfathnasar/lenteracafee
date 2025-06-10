@@ -157,8 +157,8 @@ class _ProfileState extends State<Profile> {
                             ),
                             SizedBox(height: 20),
                             GestureDetector(
-                              onTap: () {
-                                showDialog(
+                              onTap: () async {
+                                bool isLogout = await showDialog(
                                   context: context,
                                   builder: (context) {
                                     return Dialog(
@@ -200,7 +200,10 @@ class _ProfileState extends State<Profile> {
                                               children: [
                                                 TextButton(
                                                   onPressed: () {
-                                                    Navigator.pop(context);
+                                                    Navigator.pop(
+                                                      context,
+                                                      false,
+                                                    );
                                                   },
                                                   child: Text(
                                                     "Batal",
@@ -222,17 +225,10 @@ class _ProfileState extends State<Profile> {
                                                           ),
                                                     ),
                                                   ),
-                                                  onPressed: () async {
-                                                    SharedPreferences pref =
-                                                        await SharedPreferences.getInstance();
-                                                    await pref.clear();
-                                                    Navigator.pushReplacement(
+                                                  onPressed: () {
+                                                    Navigator.pop(
                                                       context,
-                                                      MaterialPageRoute(
-                                                        builder: (context) {
-                                                          return Login();
-                                                        },
-                                                      ),
+                                                      true,
                                                     );
                                                   },
                                                   child: const Text(
@@ -250,6 +246,20 @@ class _ProfileState extends State<Profile> {
                                     );
                                   },
                                 );
+
+                                if (isLogout) {
+                                  SharedPreferences pref =
+                                      await SharedPreferences.getInstance();
+                                  await pref.clear();
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) {
+                                        return Login();
+                                      },
+                                    ),
+                                  );
+                                }
                               },
                               child: Row(
                                 children: [

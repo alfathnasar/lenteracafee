@@ -51,92 +51,194 @@ class _RekapTransaksiState extends State<RekapTransaksi> {
               ),
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              // Kartu Pemasukan
-              Container(
-                width: 170,
-                margin: EdgeInsets.only(left: 20),
-                padding: EdgeInsets.symmetric(vertical: 10),
-                decoration: BoxDecoration(
-                  color: AppColors.biru,
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+          LayoutBuilder(
+            builder: (context, constraints) {
+              if (constraints.maxWidth < 600) {
+                //untuk hp
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
-                      FontAwesomeIcons.arrowDown,
-                      size: 30,
-                      color: AppColors.putih,
+                    // Kartu Pemasukan
+                    Container(
+                      width: 165,
+                      margin: EdgeInsets.only(left: 20),
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      decoration: BoxDecoration(
+                        color: AppColors.biru,
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Icon(
+                            FontAwesomeIcons.arrowDown,
+                            size: 30,
+                            color: AppColors.putih,
+                          ),
+                          Column(
+                            children: [
+                              Text(
+                                "Pemasukan",
+                                style: TextStyle(
+                                  fontFamily: "Poppins",
+                                  color: AppColors.putih,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              Text(
+                                formatRupiah(pemasukan),
+                                style: TextStyle(
+                                  fontFamily: "Poppins",
+                                  color: AppColors.putih,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                    Column(
-                      children: [
-                        Text(
-                          "Pemasukan",
-                          style: TextStyle(
-                            fontFamily: "Poppins",
+                    SizedBox(width: 15),
+                    // Kartu Pengeluaran
+                    Container(
+                      width: 165,
+                      margin: EdgeInsets.only(right: 20),
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      decoration: BoxDecoration(
+                        color: AppColors.biru,
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Icon(
+                            FontAwesomeIcons.arrowUp,
+                            size: 30,
                             color: AppColors.putih,
-                            fontSize: 16,
                           ),
-                        ),
-                        Text(
-                          formatRupiah(pemasukan),
-                          style: TextStyle(
-                            fontFamily: "Poppins",
-                            color: AppColors.putih,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
+                          Column(
+                            children: [
+                              Text(
+                                "Pengeluaran",
+                                style: TextStyle(
+                                  fontFamily: "Poppins",
+                                  color: AppColors.putih,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              Text(
+                                formatRupiah(pengeluaran),
+                                style: TextStyle(
+                                  fontFamily: "Poppins",
+                                  color: AppColors.putih,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ],
-                ),
-              ),
-              // Kartu Pengeluaran
-              Container(
-                width: 170,
-                margin: EdgeInsets.only(right: 20),
-                padding: EdgeInsets.symmetric(vertical: 10),
-                decoration: BoxDecoration(
-                  color: AppColors.biru,
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                );
+              } else {
+                //untuk dekstop atau tablet
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Icon(
-                      FontAwesomeIcons.arrowUp,
-                      size: 30,
-                      color: AppColors.putih,
+                    // Kartu Pemasukan
+                    Container(
+                      width: 270,
+                      height: 100,
+                      margin: EdgeInsets.only(left: 20),
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      decoration: BoxDecoration(
+                        color: AppColors.biru,
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Icon(
+                            FontAwesomeIcons.arrowDown,
+                            size: 30,
+                            color: AppColors.putih,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Pemasukan",
+                                style: TextStyle(
+                                  fontFamily: "Poppins",
+                                  color: AppColors.putih,
+                                  fontSize: 24,
+                                ),
+                              ),
+                              Text(
+                                formatRupiah(pemasukan),
+                                style: TextStyle(
+                                  fontFamily: "Poppins",
+                                  color: AppColors.putih,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 24,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                    Column(
-                      children: [
-                        Text(
-                          "Pengeluaran",
-                          style: TextStyle(
-                            fontFamily: "Poppins",
+                    SizedBox(width: 20),
+                    // Kartu Pengeluaran
+                    Container(
+                      width: 270,
+                      height: 100,
+                      margin: EdgeInsets.only(right: 20),
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      decoration: BoxDecoration(
+                        color: AppColors.biru,
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Icon(
+                            FontAwesomeIcons.arrowUp,
+                            size: 30,
                             color: AppColors.putih,
-                            fontSize: 16,
                           ),
-                        ),
-                        Text(
-                          formatRupiah(pengeluaran),
-                          style: TextStyle(
-                            fontFamily: "Poppins",
-                            color: AppColors.putih,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Pengeluaran",
+                                style: TextStyle(
+                                  fontFamily: "Poppins",
+                                  color: AppColors.putih,
+                                  fontSize: 24,
+                                ),
+                              ),
+                              Text(
+                                formatRupiah(pengeluaran),
+                                style: TextStyle(
+                                  fontFamily: "Poppins",
+                                  color: AppColors.putih,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 24,
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ],
-                ),
-              ),
-            ],
+                );
+              }
+            },
           ),
         ],
       ),

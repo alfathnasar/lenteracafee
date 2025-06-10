@@ -41,33 +41,75 @@ class _RekapPesananState extends State<RekapPesanan> {
               ),
             ),
           ),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                // Menunggu - Pending
-                // buildCard(
-                //   icon: FontAwesomeIcons.solidClock,
-                //   label: "Menunggu",
-                //   count: menunggu,
-                //   color: Colors.redAccent,
-                // ),
-                // Proses - Confirm
-                buildCard(
-                  icon: Icons.pie_chart_sharp,
-                  label: "Proses",
-                  count: proses,
-                  color: Colors.yellow[800]!,
-                ),
-                // Selesai - Done
-                buildCard(
-                  icon: FontAwesomeIcons.solidCircleCheck,
-                  label: "Selesai",
-                  count: selesai,
-                  color: Colors.green[600]!,
-                ),
-              ],
-            ),
+          LayoutBuilder(
+            builder: (context, constraints) {
+              if (constraints.maxWidth < 600) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Menunggu - Pending
+                    // buildCard(
+                    //   icon: FontAwesomeIcons.solidClock,
+                    //   label: "Menunggu",
+                    //   count: menunggu,
+                    //   color: Colors.redAccent,
+                    // ),
+                    // Proses - Confirm
+                    buildCard(
+                      icon: Icons.pie_chart_sharp,
+                      label: "Proses",
+                      count: proses,
+                      color: Colors.yellow[800]!,
+                      height: 70,
+                      width: 165,
+                      fontSize: 16,
+                    ),
+                    // Selesai - Done
+                    buildCard(
+                      icon: FontAwesomeIcons.solidCircleCheck,
+                      label: "Selesai",
+                      count: selesai,
+                      color: Colors.green[600]!,
+                      height: 70,
+                      width: 165,
+                      fontSize: 16,
+                    ),
+                  ],
+                );
+              } else {
+                return Row(
+                  children: [
+                    // Menunggu - Pending
+                    // buildCard(
+                    //   icon: FontAwesomeIcons.solidClock,
+                    //   label: "Menunggu",
+                    //   count: menunggu,
+                    //   color: Colors.redAccent,
+                    // ),
+                    // Proses - Confirm
+                    buildCard(
+                      icon: Icons.pie_chart_sharp,
+                      label: "Proses",
+                      count: proses,
+                      color: Colors.yellow[800]!,
+                      height: 100,
+                      width: 275,
+                      fontSize: 24,
+                    ),
+                    // Selesai - Done
+                    buildCard(
+                      icon: FontAwesomeIcons.solidCircleCheck,
+                      label: "Selesai",
+                      count: selesai,
+                      color: Colors.green[600]!,
+                      height: 100,
+                      width: 275,
+                      fontSize: 24,
+                    ),
+                  ],
+                );
+              }
+            },
           ),
         ],
       ),
@@ -79,9 +121,13 @@ class _RekapPesananState extends State<RekapPesanan> {
     required String label,
     required int count,
     required Color color,
+    required double width,
+    required double height,
+    required double fontSize,
   }) {
     return Container(
-      width: 180,
+      width: width,
+      height: height,
       margin: EdgeInsets.symmetric(horizontal: 10),
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       decoration: BoxDecoration(
@@ -99,7 +145,7 @@ class _RekapPesananState extends State<RekapPesanan> {
                 style: TextStyle(
                   fontFamily: "Poppins",
                   color: AppColors.putih,
-                  fontSize: 18,
+                  fontSize: fontSize,
                 ),
               ),
               Text(
@@ -108,7 +154,7 @@ class _RekapPesananState extends State<RekapPesanan> {
                   fontFamily: "Poppins",
                   color: AppColors.putih,
                   fontWeight: FontWeight.bold,
-                  fontSize: 30,
+                  fontSize: fontSize,
                 ),
               ),
             ],
